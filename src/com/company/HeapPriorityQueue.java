@@ -76,7 +76,7 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
             int p = parent(index);
 
             //Check heap property
-            if (this.data[index].getKey().compareTo(this.data[p].getKey()) > 0){
+            if (this.data[index].getKey().compareTo(this.data[p].getKey()) == currentState.getValue()){
                 swap(index,p);
                 index = p;
                 upHeap(index);

@@ -1,26 +1,22 @@
 package com.company;
 
+import java.util.Random;
+
 public class Main {
 
     public static void main(String[] args) throws IllegalAccessException {
-	// write your code here
+
+        //Instantiate my heap class with a starting state of MAX_HEAP
         HeapPriorityQueue<Integer, String> heapPQ = new HeapPriorityQueue<Integer, String>(State.Max);
 
-        //Add 12 elements to the Heap
-        heapPQ.insert(1,"2");
-        heapPQ.insert(-5,"4");
-        heapPQ.insert(2,"10");
-        heapPQ.insert(5,"11");
-        heapPQ.insert(9,"13");
-        heapPQ.insert(2,"15");
-        heapPQ.insert(9,"37");
-        heapPQ.insert(4,"4");
-        heapPQ.insert(3,"20");
-        heapPQ.insert(25,"4");
-        heapPQ.insert(33,"4");
-        heapPQ.insert(0,"4");
-        heapPQ.insert(-2,"4");
-        heapPQ.insert(100,"4");
+        //Add
+        Random rand = new Random();
+        System.out.println("--------------------------------------------------------");
+        System.out.println("Elements inserted are under MAX_HEAP state");
+        System.out.println("--------------------------------------------------------");
+        for (int i =0; i < 25; i++){
+            System.out.println("Element " + i + " inserted: " + heapPQ.insert(rand.nextInt(1000 - 10 + 1), "3"));
+        }
 
         //See if the heap is empty
         System.out.println(heapPQ.isEmpty());
@@ -51,12 +47,34 @@ public class Main {
         //See if it changes anything
         heapPQ.switchToMax();
 
+        System.out.println("--------------------------------------------------------");
+        System.out.println("Elements removed are under MAX_HEAP state");
+        System.out.println("--------------------------------------------------------");
+
         //Remove all elements (removes them in the order of the current state
-        int i = 0;
+        int count = 0;
         while (!heapPQ.isEmpty())
-            System.out.println("Element: " + (i++) + " " + heapPQ.remove() + " | Size of heap: " + heapPQ.size());
+            System.out.println("Element: " + (count++) + " " + heapPQ.remove() + " | Size of heap: " + heapPQ.size());
 
         //See if the heap is empty after removing all elements
         System.out.println(heapPQ.isEmpty());
+
+        System.out.println("--------------------------------------------------------");
+        System.out.println("Elements inserted are under MIN_HEAP state");
+        System.out.println("--------------------------------------------------------");
+
+        //Try min switch state
+        heapPQ.switchToMin();
+
+        for (int i =0; i < 25; i++){
+            System.out.println("Element inserted: " + i + " " + heapPQ.insert(rand.nextInt(1000 - 10 + 1), "3"));
+        }
+
+        System.out.println("--------------------------------------------------------");
+        System.out.println("Elements removed are under MIN_HEAP state");
+        System.out.println("--------------------------------------------------------");
+        count = 0;
+        while (!heapPQ.isEmpty())
+            System.out.println("Element: " + (count++) + " " + heapPQ.remove() + " | Size of heap: " + heapPQ.size());
     }
 }
