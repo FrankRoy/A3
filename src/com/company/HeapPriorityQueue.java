@@ -11,11 +11,11 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
     private Pair<K,V> data[];
 
     private int size = 0;
-    private State currentState;
+    private HeapPriorityState currentHeapPriorityState;
 
-    HeapPriorityQueue(State state){
+    HeapPriorityQueue(HeapPriorityState state){
       data  = new Pair[INITIAL_SIZE];
-      currentState = state;
+      currentHeapPriorityState = state;
     }
 
 
@@ -49,34 +49,35 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
         }
     }
 
+    //Arrange the "binary tree" into the heap depending on the current heap state
     private void heapify(int index)  {
 
-        int largest = index;
+        int largestORSmallestOnCurrentState = index;
         int l = left(index);
         int r = right(index);
 
-        if (l <= this.size - 1 && data[l].getKey().compareTo(data[index].getKey()) == this.currentState.getValue()) {
-            largest = l;
+        if (l <= this.size - 1 && data[l].getKey().compareTo(data[index].getKey()) == this.currentHeapPriorityState.getValue()) {
+            largestORSmallestOnCurrentState = l;
         }
 
-        if (r <= this.size - 1 && data[r].getKey().compareTo(data[largest].getKey()) == this.currentState.getValue()) {
-            largest = r;
+        if (r <= this.size - 1 && data[r].getKey().compareTo(data[largestORSmallestOnCurrentState].getKey()) == this.currentHeapPriorityState.getValue()) {
+            largestORSmallestOnCurrentState = r;
         }
 
         //Not root
-        if (largest != index){
-            swap(index, largest);
-            heapify(largest);
+        if (largestORSmallestOnCurrentState != index){
+            swap(index, largestORSmallestOnCurrentState);
+            heapify(largestORSmallestOnCurrentState);
         }
     }
 
-    //moves the entry at index higher, if necessary, to restore the heap property
+    //Moves the entry at index higher, if necessary, to restore the heap property
     private void upHeap(int index) {
         if (index != 0){
             int p = parent(index);
 
             //Check heap property
-            if (this.data[index].getKey().compareTo(this.data[p].getKey()) == currentState.getValue()){
+            if (this.data[index].getKey().compareTo(this.data[p].getKey()) == currentHeapPriorityState.getValue()){
                 swap(index,p);
                 index = p;
                 upHeap(index);
@@ -85,7 +86,7 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
         }
     }
 
-    //moves the entry at index lower, if necessary, to restore the heap property
+    //Moves the entry at index lower, if necessary, to restore the heap property
     private void downHeap(int index){
 
         int leftIndex = left(index);
@@ -95,6 +96,7 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
 
         if (!hasRight(index))
         {
+            //No more children
             if (!hasLeft(index)){
                 return;
             }
@@ -102,7 +104,7 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
                 smallChildIndex = leftIndex;
             }
         }else{
-            if (this.data[leftIndex].getKey().compareTo(this.data[rightIndex].getKey()) == currentState.getValue()){
+            if (this.data[leftIndex].getKey().compareTo(this.data[rightIndex].getKey()) == currentHeapPriorityState.getValue()){
                 smallChildIndex = leftIndex;
             }
             else{
@@ -110,7 +112,8 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
             }
         }
 
-        if (this.data[index].getKey().compareTo(this.data[smallChildIndex].getKey()) != currentState.getValue()) {
+        //Swap the parent with the bigger or smaller children depending on the current state
+        if (this.data[index].getKey().compareTo(this.data[smallChildIndex].getKey()) != currentHeapPriorityState.getValue()) {
             swap(index, smallChildIndex);
             downHeap(smallChildIndex);
         }
@@ -178,6 +181,7 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
 
     }
 
+    //Insert an element in the priority queue and place it at the proper position so it follows the heap property
     public Pair<K,V> insert(K key,V value){
 
         int position = checkKeyExist(key);
@@ -222,31 +226,31 @@ public class HeapPriorityQueue <K extends Comparable<K>, V> {
     }
 
     public void toggle() {
-        if (currentState == State.Max) {
-            currentState = State.Min;
+        if (currentHeapPriorityState == HeapPriorityState.Max) {
+            currentHeapPriorityState = HeapPriorityState.Min;
             buildHeap();
         }else{
-            currentState = State.Max;
+            currentHeapPriorityState = HeapPriorityState.Max;
             buildHeap();
         }
     }
 
     public void switchToMin(){
-        if (this.currentState == State.Min)
+        if (this.currentHeapPriorityState == HeapPriorityState.Min)
             return;
         else
             toggle();
     }
 
     public void switchToMax(){
-        if (this.currentState == State.Max)
+        if (this.currentHeapPriorityState == HeapPriorityState.Max)
             return;
         else
             toggle();
     }
 
-    public State state(){
-        return this.currentState;
+    public HeapPriorityState state(){
+        return this.currentHeapPriorityState;
     }
 
     public boolean isEmpty(){

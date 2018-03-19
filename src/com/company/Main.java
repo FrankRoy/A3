@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws IllegalAccessException {
 
         //Instantiate my heap class with a starting state of MAX_HEAP
-        HeapPriorityQueue<Integer, String> heapPQ = new HeapPriorityQueue<Integer, String>(State.Max);
+        HeapPriorityQueue<Integer, String> heapPQ = new HeapPriorityQueue<Integer, String>(HeapPriorityState.Max);
 
         //Add
         Random rand = new Random();
@@ -22,7 +22,7 @@ public class Main {
         System.out.println(heapPQ.isEmpty());
 
         //See the top element
-        System.out.println(heapPQ.top());
+        System.out.println("The top element is: " + heapPQ.top());
 
         //See the current state
         System.out.println(heapPQ.state());
@@ -62,6 +62,9 @@ public class Main {
         System.out.println("--------------------------------------------------------");
         System.out.println("Elements inserted are under MIN_HEAP state");
         System.out.println("--------------------------------------------------------");
+
+
+
 
         //Try min switch state
         heapPQ.switchToMin();
